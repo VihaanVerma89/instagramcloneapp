@@ -20,7 +20,8 @@ An Instagram-like Android application built with Jetpack Compose that replicates
 
 ## Screenshots
 
-[Add screenshots of your app here]
+### 📱 Feed Screen
+![Feed Screenshot](screenshots/feed_screenshot.png)
 
 ## Tech Stack
 
