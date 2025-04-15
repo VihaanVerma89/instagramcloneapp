@@ -35,6 +35,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -43,6 +45,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.outlined.ChatBubble
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -117,7 +120,8 @@ fun InstagramFeed(viewModel: FeedViewModel) {
                 } else if ((post.id % 7).toInt() == 0) {
                     SuggestedUserItem()
                 } else {
-                    PostItem(post = post)
+//                    PostItem(post = post)
+                    EnhancedPostItem(post)
                 }
 
                 Divider(
@@ -1053,8 +1057,40 @@ fun EnhancedPostItem(post: Post) {
     var showShareDialog by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        // Post header (keep the same)
-        // ...
+        // Post header with user info
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // User avatar
+            Image(
+                painter = rememberAsyncImagePainter(post.userAvatar),
+                contentDescription = "User avatar",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+
+            // Username
+            Text(
+                text = post.username,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // More options icon
+            IconButton(onClick = { }) {
+                Icon(
+                    Icons.Default.MoreVert,
+                    contentDescription = "More options"
+                )
+            }
+        }
 
         // Use PostImage for double-tap like
         PostImage(
@@ -1064,37 +1100,140 @@ fun EnhancedPostItem(post: Post) {
 
         // Action buttons
         Row(
-            // ...
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp, top = 8.dp)
         ) {
-            // ... Like button
-
-            // Comment button
-            // ...
-
-            // Share button - opens dialog
-            IconButton(onClick = { showShareDialog = true }) {
-                Icon(Icons.Default.Send, "Share")
+            IconButton(
+                onClick = { isLiked = !isLiked },
+                modifier = Modifier.size(28.dp)
+            ) {
+                Icon(
+                    if (isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Like",
+                    tint = if (isLiked) Color.Red else Color.Black,
+                    modifier = Modifier.size(28.dp)
+                )
             }
 
-            // ... Save button
+            Spacer(modifier = Modifier.width(4.dp))
+
+            IconButton(
+                onClick = { },
+                modifier = Modifier.size(28.dp)
+            ) {
+                Icon(
+                    Icons.Outlined.ChatBubble, // Using the Outlined version from the extended icons
+                    contentDescription = "Comment",
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            IconButton(
+                onClick = { showShareDialog = true },
+                modifier = Modifier.size(28.dp)
+            ) {
+                Icon(
+                    Icons.Default.Send,
+                    contentDescription = "Share",
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(
+                onClick = { isSaved = !isSaved },
+                modifier = Modifier.size(28.dp)
+            ) {
+                Icon(
+                    if (isSaved) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                    contentDescription = "Save",
+                    tint = Color.Black,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
 
-        // Rest of post content
-        // ...
+        // Likes count
+        Text(
+            text = "${post.likesCount + (if (isLiked) 1 else 0)} likes",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+        )
 
-        // Show share dialog if needed
-        if (showShareDialog) {
-            ShareDialog(
-                onDismiss = { showShareDialog = false },
-                onShareToStory = {
-                    // Handle share to story
-                    showShareDialog = false
-                },
-                onShareToDirectMessage = {
-                    // Handle share to DM
-                    showShareDialog = false
-                }
+        // Caption
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 2.dp)
+        ) {
+            Text(
+                text = post.username,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(end = 4.dp)
             )
+
+            Text(text = post.caption)
         }
+
+        // Comments preview
+        if (post.comments.isNotEmpty()) {
+            // View all comments text if there are many
+            if (post.comments.size > 2) {
+                Text(
+                    text = "View all ${post.comments.size} comments",
+                    color = Color.Gray,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
+                )
+            }
+
+            // Display up to 2 comments
+            post.comments.take(2).forEach { comment ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 2.dp)
+                ) {
+                    Text(
+                        text = comment.username,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(end = 4.dp)
+                    )
+
+                    Text(text = comment.text)
+                }
+            }
+        }
+
+        // Timestamp
+        Text(
+            text = formatTimestamp(post.timestamp),
+            color = Color.Gray,
+            fontSize = 12.sp,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+        )
+
+        // Add some space between posts
+        Spacer(modifier = Modifier.height(4.dp))
+    }
+
+    // Show share dialog if needed
+    if (showShareDialog) {
+        ShareDialog(
+            onDismiss = { showShareDialog = false },
+            onShareToStory = {
+                // Handle share to story
+                showShareDialog = false
+            },
+            onShareToDirectMessage = {
+                // Handle share to DM
+                showShareDialog = false
+            }
+        )
     }
 }
