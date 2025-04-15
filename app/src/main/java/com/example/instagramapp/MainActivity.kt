@@ -1,22 +1,20 @@
 package com.example.instagramapp
 
-import FeedViewModel
+import com.example.instagramapp.FeedViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.instagramapp.ui.theme.InstagramAppTheme
-import com.example.instagramclone.InstagramFeed
+import com.example.instagramclone.RefreshableFeed
 
 class MainActivity : ComponentActivity() {
     private val feedViewModel: FeedViewModel by viewModels()
@@ -30,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    InstagramFeed(feedViewModel)
+                    RefreshableFeed(feedViewModel)
                 }
             }
         }

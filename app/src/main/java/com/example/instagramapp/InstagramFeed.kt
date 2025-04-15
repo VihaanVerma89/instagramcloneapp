@@ -1,6 +1,5 @@
 package com.example.instagramclone
 
-import FeedViewModel
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -84,12 +83,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
+import com.example.instagramapp.FeedViewModel
 import com.example.instagramapp.Post
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 
 @Composable
@@ -105,12 +105,16 @@ fun InstagramFeed(viewModel: FeedViewModel) {
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
+            // Add Stories at the top
+            item {
+                StoriesRow()
+            }
+
+            // Posts content
             items(posts) { post ->
                 if ((post.id % 5).toInt() == 0) {
-                    // Every 5th post is a sponsored post
                     SponsoredPost()
                 } else if ((post.id % 7).toInt() == 0) {
-                    // Every 7th post is a suggested user
                     SuggestedUserItem()
                 } else {
                     PostItem(post = post)
@@ -121,11 +125,14 @@ fun InstagramFeed(viewModel: FeedViewModel) {
                     thickness = 1.dp
                 )
             }
+
+            // Add music player at the bottom (optional)
+            item {
+                MiniMusicPlayer()
+            }
         }
     }
-}
-
-@Composable
+}@Composable
 fun StoriesRow() {
     LazyRow(
         modifier = Modifier
@@ -1036,5 +1043,58 @@ fun MiniMusicPlayer() {
                 .size(36.dp)
                 .padding(8.dp)
         )
+    }
+}
+
+@Composable
+fun EnhancedPostItem(post: Post) {
+    var isLiked by remember { mutableStateOf(false) }
+    var isSaved by remember { mutableStateOf(false) }
+    var showShareDialog by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        // Post header (keep the same)
+        // ...
+
+        // Use PostImage for double-tap like
+        PostImage(
+            imageUrl = post.imageUrl,
+            onDoubleTap = { isLiked = true }
+        )
+
+        // Action buttons
+        Row(
+            // ...
+        ) {
+            // ... Like button
+
+            // Comment button
+            // ...
+
+            // Share button - opens dialog
+            IconButton(onClick = { showShareDialog = true }) {
+                Icon(Icons.Default.Send, "Share")
+            }
+
+            // ... Save button
+        }
+
+        // Rest of post content
+        // ...
+
+        // Show share dialog if needed
+        if (showShareDialog) {
+            ShareDialog(
+                onDismiss = { showShareDialog = false },
+                onShareToStory = {
+                    // Handle share to story
+                    showShareDialog = false
+                },
+                onShareToDirectMessage = {
+                    // Handle share to DM
+                    showShareDialog = false
+                }
+            )
+        }
     }
 }

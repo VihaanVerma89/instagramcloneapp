@@ -1,6 +1,5 @@
 package com.example.instagramapp
 
-import FeedViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.instagramapp.ui.theme.InstagramAppTheme
