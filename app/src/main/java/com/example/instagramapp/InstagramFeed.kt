@@ -38,10 +38,13 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Movie
+import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
@@ -274,7 +277,7 @@ fun BottomNavigationBar() {
                     .padding(2.dp)
             )
             Icon(
-                Icons.Default.Build,
+                Icons.Default.Movie, // Changed from Build to Movie
                 contentDescription = "Reels",
                 modifier = Modifier.size(28.dp)
             )
@@ -475,7 +478,7 @@ fun SponsoredPost() {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    Icons.Default.Build,
+                    Icons.Outlined.ChatBubble, // Changed from Build
                     contentDescription = "Comments",
                     modifier = Modifier.size(24.dp)
                 )
@@ -497,7 +500,7 @@ fun SponsoredPost() {
             Spacer(modifier = Modifier.weight(1f))
 
             Icon(
-                Icons.Default.Build,
+                Icons.Default.BookmarkBorder, // Changed from Build
                 contentDescription = "Save",
                 modifier = Modifier.size(24.dp)
             )
@@ -1031,7 +1034,7 @@ fun MiniMusicPlayer() {
         }
 
         Icon(
-            Icons.Default.Build,
+            Icons.Default.Pause, // Changed from Build
             contentDescription = "Pause",
             tint = Color.White,
             modifier = Modifier
@@ -1040,7 +1043,7 @@ fun MiniMusicPlayer() {
         )
 
         Icon(
-            Icons.Default.Build,
+            Icons.Default.Close, // Changed from Build
             contentDescription = "Close",
             tint = Color.White,
             modifier = Modifier
