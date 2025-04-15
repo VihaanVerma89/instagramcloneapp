@@ -1,15 +1,21 @@
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.instagramapp.Comment
 import com.example.instagramapp.Post
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class FeedViewModel : ViewModel() {
     // Our post data
     private val _feedPosts = MutableStateFlow<List<Post>>(emptyList())
     val feedPosts: StateFlow<List<Post>> = _feedPosts.asStateFlow()
+
+    val isRefreshing = MutableStateFlow(false)
+
 
     init {
         // Generate 20 sample posts when the ViewModel is created
@@ -80,4 +86,17 @@ class FeedViewModel : ViewModel() {
 
         return commentsList
     }
+
+    fun refreshFeed() {
+        viewModelScope.launch {
+            isRefreshing.value = true
+            delay(1500) // Simulate network request
+            _feedPosts.value = generateSamplePosts()
+            isRefreshing.value = false
+        }
+    }
+
+
 }
+
+
