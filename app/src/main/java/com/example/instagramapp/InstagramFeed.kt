@@ -32,6 +32,8 @@ import com.example.instagramapp.Post
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+
 @Composable
 fun InstagramFeed(viewModel: FeedViewModel) {
     val posts by viewModel.feedPosts.collectAsState()

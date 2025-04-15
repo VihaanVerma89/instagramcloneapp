@@ -1,9 +1,11 @@
 package com.example.instagramapp
 
+import FeedViewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.instagramapp.ui.theme.InstagramAppTheme
 import com.example.instagramclone.BottomNavigationBar
+import com.example.instagramclone.InstagramFeed
 import com.example.instagramclone.PostItem
 import com.example.instagramclone.SponsoredPost
 import com.example.instagramclone.TopAppBar
@@ -53,10 +55,24 @@ fun previewPostItem() {
     }
 }
 
+// Add a proper preview for the feed
 @Preview(showBackground = true)
 @Composable
-fun previewFeed(){
-    InstagramAppTheme {
+fun PreviewFeed() {
+    // Create a previewable viewmodel with sample data
+    val previewViewModel = FeedViewModel()
 
+    InstagramAppTheme {
+        InstagramFeed(viewModel = previewViewModel)
+    }
+}
+
+
+// Also, if you want to see what the TopAppBar looks like from the real Instagram:
+@Preview(showBackground = true, widthDp = 400)
+@Composable
+fun RealInstagramTopAppBarPreview() {
+    InstagramAppTheme {
+        TopAppBar()
     }
 }
