@@ -52,7 +52,7 @@ Task:
 
  */
 // 1. Data Class
-data class Post(
+data class PostGPT(
     val authorImageUrl: String,
     val authorName: String,
     val soundtrackName: String,
@@ -63,17 +63,17 @@ data class Post(
 
 // 2. Main Post Item
 @Composable
-fun PostItem(post: Post) {
+fun PostItem(postGPT: PostGPT) {
     Column(modifier = Modifier.fillMaxWidth()) {
         PostHeader(
-            authorImageUrl = post.authorImageUrl,
-            authorName = post.authorName,
-            soundtrackName = post.soundtrackName
+            authorImageUrl = postGPT.authorImageUrl,
+            authorName = postGPT.authorName,
+            soundtrackName = postGPT.soundtrackName
         )
-        PostContent(postImageUrl = post.postImageUrl)
+        PostContent(postImageUrl = postGPT.postImageUrl)
         PostActions(
-            likedByText = post.likedByText,
-            commentsText = post.commentsText
+            likedByText = postGPT.likedByText,
+            commentsText = postGPT.commentsText
         )
     }
 }
@@ -162,7 +162,7 @@ fun PostActions(likedByText: String, commentsText: String) {
 @Preview
 @Composable
 fun ExamplePostScreen() {
-    val samplePost = Post(
+    val samplePostGPT = PostGPT(
         authorImageUrl = "https://scontent.fblr1-8.fna.fbcdn.net/v/t39.30808-1/466463917_880511570956102_8348740157884585754_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=1&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=7NmvsQg9BH0Q7kNvwErE_9h&_nc_oc=Adl31ygZtiPpt8ohcpfwCclSodX9wdkeq7mYJClGZsO7w_fOL-zzWq2EHCVNOTHqpntHAKIvZbMcVx4h21Xzja_w&_nc_zt=24&_nc_ht=scontent.fblr1-8.fna&_nc_gid=9H8psDGE1RyQWoWSHQunew&oh=00_AfGqkPIsh-hLUVSybbyYPtlrR4_fw57Xa02adj3MonDPpQ&oe=680A9768",
         authorName = "pixel_muse_",
         soundtrackName = "Chad Kroeger - Hero",
@@ -170,5 +170,5 @@ fun ExamplePostScreen() {
         likedByText = "Liked by a__sis__h and others",
         commentsText = "30 comments"
     )
-    PostItem(post = samplePost)
+    PostItem(postGPT = samplePostGPT)
 }
