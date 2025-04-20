@@ -1,4 +1,4 @@
-package com.example.instagramapp.sharechatUI
+package com.example.instagramapp.generatedUis
 
 
 import androidx.compose.foundation.background
