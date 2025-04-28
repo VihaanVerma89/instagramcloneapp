@@ -712,13 +712,16 @@ fun PostItem(post: Post) {
                 .padding(start = 12.dp, end = 12.dp, top = 8.dp)
         ) {
             IconButton(
-                onClick = { isLiked = !isLiked },
+                onClick = { 
+                    isLikedState = !isLikedState
+                    onLikeClick() 
+                },
                 modifier = Modifier.size(28.dp)
             ) {
                 Icon(
-                    if (isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    if (isLikedState) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Like",
-                    tint = if (isLiked) Color.Red else Color.Black,
+                    tint = if (isLikedState) Color.Red else Color.Black,
                     modifier = Modifier.size(28.dp)
                 )
             }
@@ -768,7 +771,7 @@ fun PostItem(post: Post) {
 
         // Likes count - updated style
         Text(
-            text = "${post.likesCount + (if (isLiked) 1 else 0)} likes",
+            text = "${post.likesCount + (if (isLikedState) 1 else 0)} likes",
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         )
@@ -1054,10 +1057,24 @@ fun MiniMusicPlayer() {
 }
 
 @Composable
-fun EnhancedPostItem(post: Post) {
-    var isLiked by remember { mutableStateOf(false) }
-    var isSaved by remember { mutableStateOf(false) }
+fun EnhancedPostItem(
+    post: Post,
+    isLiked: Boolean = false,
+    isSaved: Boolean = false,
+    onLikeClick: () -> Unit = {},
+    onSaveClick: () -> Unit = {},
+    onShareClick: () -> Unit = {},
+    onDoubleTapLike: () -> Unit = {}
+) {
+    var isLikedState by remember { mutableStateOf(isLiked) }
+    var isSavedState by remember { mutableStateOf(isSaved) }
     var showShareDialog by remember { mutableStateOf(false) }
+    
+    // Update local state when props change
+    LaunchedEffect(isLiked, isSaved) {
+        isLikedState = isLiked
+        isSavedState = isSaved
+    }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         // Post header with user info
@@ -1099,7 +1116,8 @@ fun EnhancedPostItem(post: Post) {
         PostImage(
             imageUrl = post.imageUrl,
             onDoubleTap = {
-                isLiked = true
+                isLikedState = true
+                onDoubleTapLike()
             }
         )
 
@@ -1138,7 +1156,10 @@ fun EnhancedPostItem(post: Post) {
             Spacer(modifier = Modifier.width(4.dp))
 
             IconButton(
-                onClick = { showShareDialog = true },
+                onClick = { 
+                    showShareDialog = true
+                    onShareClick()
+                },
                 modifier = Modifier.size(28.dp)
             ) {
                 Icon(
@@ -1152,11 +1173,14 @@ fun EnhancedPostItem(post: Post) {
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(
-                onClick = { isSaved = !isSaved },
+                onClick = { 
+                    isSavedState = !isSavedState
+                    onSaveClick()
+                },
                 modifier = Modifier.size(28.dp)
             ) {
                 Icon(
-                    if (isSaved) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                    if (isSavedState) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
                     contentDescription = "Save",
                     tint = Color.Black,
                     modifier = Modifier.size(24.dp)

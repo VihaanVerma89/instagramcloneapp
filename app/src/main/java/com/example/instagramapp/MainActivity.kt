@@ -1,6 +1,5 @@
 package com.example.instagramapp
 
-import com.example.instagramapp.FeedViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,10 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.instagramapp.mvi.feed.FeedScreen
+import com.example.instagramapp.mvi.feed.FeedViewModel
 import com.example.instagramapp.ui.theme.InstagramAppTheme
-import com.example.instagramapp.RefreshableFeed
 
 class MainActivity : ComponentActivity() {
+    // Use the new MVI ViewModel
     private val feedViewModel: FeedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +29,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RefreshableFeed(feedViewModel)
+                    // Use the new MVI Feed screen
+                    FeedScreen(feedViewModel)
                 }
             }
         }
