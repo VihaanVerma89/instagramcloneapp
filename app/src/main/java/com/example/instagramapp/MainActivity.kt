@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.instagramapp.mvi.feed.FeedScreen
 import com.example.instagramapp.mvi.feed.FeedViewModel
+// Backup implementation for fallback
+import com.example.instagramapp.RefreshableFeedFixed
 import com.example.instagramapp.ui.theme.InstagramAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,8 +31,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Use the new MVI Feed screen
-                    FeedScreen(feedViewModel)
+                    // Try to use MVI implementation first, fallback to fixed implementation if there are issues
+                    try {
+                        FeedScreen(feedViewModel)
+                    } catch (e: Exception) {
+                        // Fallback to the fixed implementation
+                        RefreshableFeedFixed(feedViewModel)
+                    }
                 }
             }
         }

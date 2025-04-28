@@ -112,13 +112,7 @@ private fun EnhancedPostItemWrapper(
     onShareClick: () -> Unit,
     onDoubleTapLike: () -> Unit
 ) {
-    // Create a custom post with the correct like count based on isLiked state
-    val adjustedPost = if (isLiked) {
-        // Don't adjust like count if we're passing isLiked state directly
-        post
-    } else {
-        post
-    }
+    // No need to adjust the post, as we're handling the like count in the UI
     
     // Use the existing EnhancedPostItem but set our callbacks
     EnhancedPostItem(

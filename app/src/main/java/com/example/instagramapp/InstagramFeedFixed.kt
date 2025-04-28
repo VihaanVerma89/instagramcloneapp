@@ -88,19 +88,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
+// Safety import for the old FeedViewModel
+import com.example.instagramapp.FeedViewModel
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-
 @Composable
-fun InstagramFeed(viewModel: FeedViewModel) {
+fun InstagramFeedFixed(viewModel: FeedViewModel) {
     val posts by viewModel.feedPosts.collectAsState()
 
     Scaffold(
-        topBar = { TopAppBar() },
-        bottomBar = { BottomNavigationBar() },
+        topBar = { TopAppBarFixed() },
+        bottomBar = { BottomNavigationBarFixed() },
         containerColor = Color.White
     ) { paddingValues ->
         // Main feed
@@ -109,18 +110,17 @@ fun InstagramFeed(viewModel: FeedViewModel) {
         ) {
             // Add Stories at the top
             item {
-                StoriesRow()
+                StoriesRowFixed()
             }
 
             // Posts content
             items(posts) { post ->
                 if ((post.id % 5).toInt() == 0) {
-                    SponsoredPost()
+                    SponsoredPostFixed()
                 } else if ((post.id % 7).toInt() == 0) {
-                    SuggestedUserItem()
+                    SuggestedUserItemFixed()
                 } else {
-//                    PostItem(post = post)
-                    EnhancedPostItem(post)
+                    EnhancedPostItemFixed(post)
                 }
 
                 Divider(
@@ -131,14 +131,14 @@ fun InstagramFeed(viewModel: FeedViewModel) {
 
             // Add music player at the bottom (optional)
             item {
-                MiniMusicPlayer()
+                MiniMusicPlayerFixed()
             }
         }
     }
 }
 
 @Composable
-fun StoriesRow() {
+fun StoriesRowFixed() {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -240,9 +240,8 @@ fun StoriesRow() {
     }
 }
 
-
 @Composable
-fun BottomNavigationBar() {
+fun BottomNavigationBarFixed() {
     Surface(
         color = Color.White,
         modifier = Modifier
@@ -293,7 +292,7 @@ fun BottomNavigationBar() {
 }
 
 @Composable
-fun SponsoredPost() {
+fun SponsoredPostFixed() {
     Column(modifier = Modifier.fillMaxWidth()) {
         // Post header with sponsor info
         Row(
@@ -516,7 +515,7 @@ fun SponsoredPost() {
 }
 
 @Composable
-fun SuggestedUserItem() {
+fun SuggestedUserItemFixed() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -597,7 +596,7 @@ fun SuggestedUserItem() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar() {
+fun TopAppBarFixed() {
     TopAppBar(
         title = {
             Row(
@@ -647,7 +646,7 @@ fun TopAppBar() {
 }
 
 @Composable
-fun PostItem(post: Post) {
+fun PostItemFixed(post: Post) {
     var isLiked by remember { mutableStateOf(false) }
     var isSaved by remember { mutableStateOf(false) }
 
@@ -828,24 +827,8 @@ fun PostItem(post: Post) {
     }
 }
 
-fun formatTimestamp(timestamp: Long): String {
-    val now = System.currentTimeMillis()
-    val diffInMillis = now - timestamp
-
-    return when {
-        diffInMillis < 60000 -> "Just now"
-        diffInMillis < 3600000 -> "${diffInMillis / 60000} minutes ago"
-        diffInMillis < 86400000 -> "${diffInMillis / 3600000} hours ago"
-        diffInMillis < 604800000 -> "${diffInMillis / 86400000} days ago"
-        else -> {
-            val sdf = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-            sdf.format(Date(timestamp))
-        }
-    }
-}
-
 @Composable
-fun PostImage(
+fun PostImageFixed(
     imageUrl: String,
     onDoubleTap: () -> Unit
 ) {
@@ -899,7 +882,7 @@ fun PostImage(
 // 3. Add pull-to-refresh functionality
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RefreshableFeed(viewModel: FeedViewModel) {
+fun RefreshableFeedFixed(viewModel: FeedViewModel) {
     val isRefreshing by viewModel.isRefreshing.collectAsState()
 
     val refreshState = rememberPullRefreshState(
@@ -913,7 +896,7 @@ fun RefreshableFeed(viewModel: FeedViewModel) {
             .pullRefresh(refreshState)
     ) {
         // Your existing feed content
-        InstagramFeed(viewModel)
+        InstagramFeedFixed(viewModel)
 
         PullRefreshIndicator(
             refreshing = isRefreshing,
@@ -925,7 +908,7 @@ fun RefreshableFeed(viewModel: FeedViewModel) {
 
 // 4. Add post sharing functionality
 @Composable
-fun ShareDialog(
+fun ShareDialogFixed(
     onDismiss: () -> Unit,
     onShareToStory: () -> Unit,
     onShareToDirectMessage: () -> Unit
@@ -935,13 +918,13 @@ fun ShareDialog(
         title = { Text("Share to") },
         text = {
             Column {
-                ShareOption(
+                ShareOptionFixed(
                     icon = Icons.Default.Person,
                     text = "Add to your story",
                     onClick = onShareToStory
                 )
                 Divider()
-                ShareOption(
+                ShareOptionFixed(
                     icon = Icons.Default.Send,
                     text = "Send to...",
                     onClick = onShareToDirectMessage
@@ -957,7 +940,7 @@ fun ShareDialog(
 }
 
 @Composable
-fun ShareOption(
+fun ShareOptionFixed(
     icon: ImageVector,
     text: String,
     onClick: () -> Unit
@@ -985,7 +968,7 @@ fun ShareOption(
 
 // 5. Add a floating music player like Instagram Reels
 @Composable
-fun MiniMusicPlayer() {
+fun MiniMusicPlayerFixed() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -1046,7 +1029,7 @@ fun MiniMusicPlayer() {
 }
 
 @Composable
-fun EnhancedPostItem(
+fun EnhancedPostItemFixed(
     post: Post,
     isLiked: Boolean = false,
     isSaved: Boolean = false,
@@ -1055,14 +1038,15 @@ fun EnhancedPostItem(
     onShareClick: () -> Unit = {},
     onDoubleTapLike: () -> Unit = {}
 ) {
-    var isLikedState by remember { mutableStateOf(isLiked) }
-    var isSavedState by remember { mutableStateOf(isSaved) }
+    // Use local state to track the like/save states
+    var isLikedLocal by remember { mutableStateOf(isLiked) }
+    var isSavedLocal by remember { mutableStateOf(isSaved) }
     var showShareDialog by remember { mutableStateOf(false) }
 
     // Update local state when props change
     LaunchedEffect(isLiked, isSaved) {
-        isLikedState = isLiked
-        isSavedState = isSaved
+        isLikedLocal = isLiked
+        isSavedLocal = isSaved
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -1102,10 +1086,10 @@ fun EnhancedPostItem(
         }
 
         // Use PostImage for double-tap like
-        PostImage(
+        PostImageFixed(
             imageUrl = post.imageUrl,
             onDoubleTap = {
-                isLikedState = true
+                isLikedLocal = true
                 onDoubleTapLike()
             }
         )
@@ -1117,13 +1101,16 @@ fun EnhancedPostItem(
                 .padding(start = 12.dp, end = 12.dp, top = 8.dp)
         ) {
             IconButton(
-                onClick = { var newState = !isLikedState; isLikedState = newState; onLikeClick() },
+                onClick = { 
+                    isLikedLocal = !isLikedLocal
+                    onLikeClick() 
+                },
                 modifier = Modifier.size(28.dp)
             ) {
                 Icon(
-                    if (isLikedState) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    if (isLikedLocal) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Like",
-                    tint = if (isLikedState) Color.Red else Color.Black,
+                    tint = if (isLikedLocal) Color.Red else Color.Black,
                     modifier = Modifier.size(28.dp)
                 )
             }
@@ -1162,11 +1149,14 @@ fun EnhancedPostItem(
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(
-                onClick = { var newSaved = !isSavedState; isSavedState = newSaved; onSaveClick() },
+                onClick = { 
+                    isSavedLocal = !isSavedLocal
+                    onSaveClick()
+                },
                 modifier = Modifier.size(28.dp)
             ) {
                 Icon(
-                    if (isSavedState) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                    if (isSavedLocal) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
                     contentDescription = "Save",
                     tint = Color.Black,
                     modifier = Modifier.size(24.dp)
@@ -1176,7 +1166,7 @@ fun EnhancedPostItem(
 
         // Likes count
         Text(
-            text = "${post.likesCount + (if (isLikedState) 1 else 0)} likes",
+            text = "${post.likesCount + (if (isLikedLocal) 1 else 0)} likes",
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         )
@@ -1239,7 +1229,7 @@ fun EnhancedPostItem(
 
     // Show share dialog if needed
     if (showShareDialog) {
-        ShareDialog(
+        ShareDialogFixed(
             onDismiss = { showShareDialog = false },
             onShareToStory = {
                 // Handle share to story
