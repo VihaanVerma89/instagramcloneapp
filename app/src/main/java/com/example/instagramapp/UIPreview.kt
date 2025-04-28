@@ -3,11 +3,6 @@ package com.example.instagramapp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.instagramapp.ui.theme.InstagramAppTheme
-import com.example.instagramclone.BottomNavigationBar
-import com.example.instagramclone.InstagramFeed
-import com.example.instagramclone.PostItem
-import com.example.instagramclone.SponsoredPost
-import com.example.instagramclone.TopAppBar
 
 
 @Preview(showBackground = true)

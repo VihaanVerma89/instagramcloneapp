@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.instagramapp.ui.theme.InstagramAppTheme
-import com.example.instagramclone.RefreshableFeed
+import com.example.instagramapp.RefreshableFeed
 
 class MainActivity : ComponentActivity() {
     private val feedViewModel: FeedViewModel by viewModels()

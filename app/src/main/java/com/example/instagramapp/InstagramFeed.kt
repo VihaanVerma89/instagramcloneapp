@@ -1,4 +1,4 @@
-package com.example.instagramclone
+package com.example.instagramapp
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -1098,7 +1098,9 @@ fun EnhancedPostItem(post: Post) {
         // Use PostImage for double-tap like
         PostImage(
             imageUrl = post.imageUrl,
-            onDoubleTap = { isLiked = true }
+            onDoubleTap = {
+                isLiked = true
+            }
         )
 
         // Action buttons
