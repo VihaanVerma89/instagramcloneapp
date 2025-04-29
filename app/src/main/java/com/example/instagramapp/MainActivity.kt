@@ -1,5 +1,6 @@
 package com.example.instagramapp
 
+// Backup implementation for fallback
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,8 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.instagramapp.mvi.feed.FeedScreen
 import com.example.instagramapp.mvi.feed.FeedViewModel
-// Backup implementation for fallback
-import com.example.instagramapp.RefreshableFeedFixed
 import com.example.instagramapp.ui.theme.InstagramAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,12 +31,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     // Try to use MVI implementation first, fallback to fixed implementation if there are issues
-                    try {
-                        FeedScreen(feedViewModel)
-                    } catch (e: Exception) {
-                        // Fallback to the fixed implementation
-                        RefreshableFeedFixed(feedViewModel)
-                    }
+                    FeedScreen(feedViewModel)
+                    // Fallback to the fixed implementation
+//                        RefreshableFeedFixed(feedViewModel)
                 }
             }
         }

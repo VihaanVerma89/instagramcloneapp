@@ -116,7 +116,7 @@ private fun EnhancedPostItemWrapper(
     
     // Use the existing EnhancedPostItem but set our callbacks
     EnhancedPostItem(
-        post = adjustedPost,
+        post = post,
         onLikeClick = onLikeToggle,
         onSaveClick = onSaveToggle,
         onShareClick = onShareClick,
